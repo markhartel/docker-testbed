@@ -14,6 +14,4 @@ select * from temp_life_mileage where not exists(select * from pwtc_membership  
 insert into pwtc_ride_mileage select member_id, 1, mileage from temp_life_mileage where exists(select * from pwtc_membership  where temp_life_mileage.member_id = pwtc_membership.member_id);
 
 /* Drop  temporary table */
-/*
 drop table temp_life_mileage;
-*/
