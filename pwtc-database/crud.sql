@@ -16,19 +16,19 @@ select @RIDEID:=MAX(ID) from pwtc_club_rides;
 
 select * from pwtc_club_rides where ID = @RIDEID;
 
-select * from pwtc_lifetime_mileage_vw where member_id = @MEMBERID;
+select * from pwtc_lt_miles_vw where member_id = @MEMBERID;
 
 insert into pwtc_ride_mileage (member_id, ride_id, mileage) values (@MEMBERID, @RIDEID, 98) on duplicate key update mileage = 98;
 
-select * from pwtc_lifetime_mileage_vw where member_id = @MEMBERID;
+select * from pwtc_lt_miles_vw where member_id = @MEMBERID;
 
 insert into pwtc_ride_mileage (member_id, ride_id, mileage) values (@MEMBERID, @RIDEID, 99) on duplicate key update mileage = 99;
 
-select * from pwtc_lifetime_mileage_vw where member_id = @MEMBERID;
+select * from pwtc_lt_miles_vw where member_id = @MEMBERID;
 
 delete from pwtc_ride_mileage where member_id = @MEMBERID or ride_id = @RIDEID;
 
-select * from pwtc_lifetime_mileage_vw where member_id = @MEMBERID;
+select * from pwtc_lt_miles_vw where member_id = @MEMBERID;
 
 delete from pwtc_club_rides where ID = @RIDEID;
 
