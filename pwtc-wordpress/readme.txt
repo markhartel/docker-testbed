@@ -13,3 +13,7 @@ docker exec -it pwtcwordpress_db_1 /bin/bash
 mysql -uroot -pwordpress
 
 192.168.99.100:8000
+
+Post Type for the Ride Object: scheduled_rides
+Metakey for the Ride Start Date: start_time
+

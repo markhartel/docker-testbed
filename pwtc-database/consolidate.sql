@@ -9,9 +9,9 @@ insert into pwtc_club_rides (title, date) values (@MAXLABEL, @MAXDATE);
 
 select @LASTID:=MAX(ID) from pwtc_club_rides;
 
-insert into pwtc_ride_mileage (member_id, ride_id, mileage) select pwtc_membership.member_id, @LASTID, SUM(pwtc_ride_mileage.mileage) from ((pwtc_ride_mileage inner join pwtc_membership on pwtc_membership.member_id = pwtc_ride_mileage.member_id) inner join pwtc_club_rides on pwtc_ride_mileage.ride_id = pwtc_club_rides.ID) where pwtc_club_rides.ID <> @LASTID and pwtc_club_rides.date <= @MAXDATE group by pwtc_ride_mileage.member_id;
+insert into pwtc_ride_mileage (member_id, ride_id, mileage) select c.member_id, @LASTID, SUM(m.mileage) from ((pwtc_ride_mileage as m inner join pwtc_membership as c on c.member_id = m.member_id) inner join pwtc_club_rides as r on m.ride_id = r.ID) where r.ID <> @LASTID and r.date <= @MAXDATE group by m.member_id;
 
-insert into pwtc_ride_leaders (member_id, ride_id, rides_led) select pwtc_membership.member_id, @LASTID, SUM(pwtc_ride_leaders.rides_led) from ((pwtc_ride_leaders inner join pwtc_membership on pwtc_membership.member_id = pwtc_ride_leaders.member_id) inner join pwtc_club_rides on pwtc_ride_leaders.ride_id = pwtc_club_rides.ID) where pwtc_club_rides.ID <> @LASTID and pwtc_club_rides.date <= @MAXDATE group by pwtc_ride_leaders.member_id;
+insert into pwtc_ride_leaders (member_id, ride_id, rides_led) select c.member_id, @LASTID, SUM(l.rides_led) from ((pwtc_ride_leaders as l inner join pwtc_membership as c on c.member_id = l.member_id) inner join pwtc_club_rides as r on l.ride_id = r.ID) where r.ID <> @LASTID and r.date <= @MAXDATE group by l.member_id;
 
 delete from pwtc_ride_mileage where ride_id in (select ID from pwtc_club_rides where ID <> @LASTID and date <= @MAXDATE);
 

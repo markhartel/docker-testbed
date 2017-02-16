@@ -1,3 +1,9 @@
+drop table if exists temp_ride_mileage;
+drop table if exists temp_dup_names;
+drop table if exists temp_membership;
+drop table if exists temp_club_rides;
+drop table if exists temp_ride_leaders;
+
 /* Load ride table from ride CSV file, using post_id column to hold AccessDB ride ids */
 LOAD DATA INFILE '/var/lib/mysql-files/2015-Rides.csv' INTO TABLE wp_pwtc_club_rides FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (post_id, title, @datetime, @dummy, @dummy, @dummy, @dummy, @dummy, @dummy) SET date = CAST(@datetime AS DATE);
 
@@ -11,7 +17,7 @@ LOAD DATA INFILE '/var/lib/mysql-files/2015-RideSheets.csv' INTO TABLE temp_ride
 select * from temp_ride_mileage where not exists(select * from wp_pwtc_membership  where temp_ride_mileage.member_id = wp_pwtc_membership.member_id);
 
 /* Convert AccessDB ride ids to MySQL ride ids */
-update wp_pwtc_club_rides, temp_ride_mileage set temp_ride_mileage.ride_id = wp_pwtc_club_rides.ID where temp_ride_mileage.ride_id = wp_pwtc_club_rides.post_id and wp_pwtc_club_rides.post_id is not null;
+update wp_pwtc_club_rides, temp_ride_mileage set temp_ride_mileage.ride_id = wp_pwtc_club_rides.ID where temp_ride_mileage.ride_id = wp_pwtc_club_rides.post_id and wp_pwtc_club_rides.post_id <> 0;
 
 /* Insert mileages from temporary table into ride mileage table */
 insert into wp_pwtc_ride_mileage select member_id, ride_id, mileage from temp_ride_mileage where exists(select * from wp_pwtc_membership  where temp_ride_mileage.member_id = wp_pwtc_membership.member_id);
@@ -77,7 +83,7 @@ insert into temp_ride_leaders select temp_membership.member_id, temp_club_rides.
 select * from temp_ride_leaders where not exists(select * from wp_pwtc_membership  where temp_ride_leaders.member_id = wp_pwtc_membership.member_id);
 
 /* Convert AccessDB ride ids to MySQL ride ids */
-update wp_pwtc_club_rides, temp_ride_leaders set temp_ride_leaders.ride_id = wp_pwtc_club_rides.ID where temp_ride_leaders.ride_id = wp_pwtc_club_rides.post_id and wp_pwtc_club_rides.post_id is not null;
+update wp_pwtc_club_rides, temp_ride_leaders set temp_ride_leaders.ride_id = wp_pwtc_club_rides.ID where temp_ride_leaders.ride_id = wp_pwtc_club_rides.post_id and wp_pwtc_club_rides.post_id <> 0;
 
 /* Insert leaders from temporary table into ride leaders table */
 insert into wp_pwtc_ride_leaders select member_id, ride_id, rides_led from temp_ride_leaders where exists(select * from wp_pwtc_membership  where temp_ride_leaders.member_id = wp_pwtc_membership.member_id);
@@ -90,4 +96,4 @@ drop table temp_club_rides;
 drop table temp_ride_leaders;
 
 /* Set post_id column to null */
-update wp_pwtc_club_rides set post_id = null;
+update wp_pwtc_club_rides set post_id = 0;

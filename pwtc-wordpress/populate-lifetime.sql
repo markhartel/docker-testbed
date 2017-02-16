@@ -1,6 +1,8 @@
 /* Create dummy ride to hold member lifetime totals */
 insert into wp_pwtc_club_rides (title, date) values ('Totals Through 2014', '2014-12-31');
 
+drop table if exists temp_life_mileage;
+
 /* Create temporary table to hold lifetime mileages */
 create table temp_life_mileage (member_id VARCHAR(5) NOT NULL, mileage INT UNSIGNED NOT NULL);
 
