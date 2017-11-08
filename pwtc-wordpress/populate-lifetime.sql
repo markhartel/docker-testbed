@@ -13,7 +13,7 @@ LOAD DATA INFILE '/var/lib/mysql-files/2015-LifeMiles.csv' INTO TABLE temp_life_
 select * from temp_life_mileage where not exists(select * from wp_pwtc_membership  where temp_life_mileage.member_id = wp_pwtc_membership.member_id);
 
 /* Insert lifetime mileage from temporary table into ride mileage table */
-insert into wp_pwtc_ride_mileage select member_id, 1, mileage from temp_life_mileage where exists(select * from wp_pwtc_membership  where temp_life_mileage.member_id = wp_pwtc_membership.member_id);
+insert into wp_pwtc_ride_mileage select member_id, 1, mileage, null from temp_life_mileage where exists(select * from wp_pwtc_membership  where temp_life_mileage.member_id = wp_pwtc_membership.member_id);
 
 /* Drop  temporary table */
 drop table temp_life_mileage;

@@ -20,7 +20,7 @@ select * from temp_ride_mileage where not exists(select * from wp_pwtc_membershi
 update wp_pwtc_club_rides, temp_ride_mileage set temp_ride_mileage.ride_id = wp_pwtc_club_rides.ID where temp_ride_mileage.ride_id = wp_pwtc_club_rides.post_id and wp_pwtc_club_rides.post_id <> 0;
 
 /* Insert mileages from temporary table into ride mileage table */
-insert into wp_pwtc_ride_mileage select member_id, ride_id, mileage from temp_ride_mileage where exists(select * from wp_pwtc_membership  where temp_ride_mileage.member_id = wp_pwtc_membership.member_id);
+insert into wp_pwtc_ride_mileage select member_id, ride_id, mileage, null from temp_ride_mileage where exists(select * from wp_pwtc_membership  where temp_ride_mileage.member_id = wp_pwtc_membership.member_id);
 
 /* Create temporary table to hold club membership */
 create table temp_membership (member_id VARCHAR(5) NOT NULL, full_name TEXT NOT NULL);
