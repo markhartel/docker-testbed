@@ -1,12 +1,10 @@
 docker-compose up -d
 docker-compose down
 
-docker cp ./2016-Members.csv pwtcwordpress_db_1:/var/lib/mysql-files
-docker cp ./2015-LifeMiles.csv pwtcwordpress_db_1:/var/lib/mysql-files
-docker cp ./2015-Rides.csv pwtcwordpress_db_1:/var/lib/mysql-files
-docker cp ./2015-RideSheets.csv pwtcwordpress_db_1:/var/lib/mysql-files
-docker cp ./2016-Rides.csv pwtcwordpress_db_1:/var/lib/mysql-files
-docker cp ./2016-RideSheets.csv pwtcwordpress_db_1:/var/lib/mysql-files
+docker cp ./2017-Members.csv pwtcwordpress_db_1:/var/lib/mysql-files
+docker cp ./2017-LifeMiles.csv pwtcwordpress_db_1:/var/lib/mysql-files
+docker cp ./2017-Rides.csv pwtcwordpress_db_1:/var/lib/mysql-files
+docker cp ./2017-RideSheets.csv pwtcwordpress_db_1:/var/lib/mysql-files
 
 docker exec -it pwtcwordpress_db_1 /bin/bash
 docker exec -it pwtcwordpress_wp_1 /bin/bash
